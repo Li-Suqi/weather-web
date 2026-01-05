@@ -1,0 +1,110 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background-image: url("default.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding-top: 120px;
+
+  color: white;
+  text-shadow: 1px 1px 1px rgb(61, 67, 74); /* distance horizentally, vertically, and spread*/
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  overflow: hidden;
+}
+
+#weatherContainer {
+  background-color: rgba(0, 0, 0, 0.25);
+  box-shadow: 1px 1px 3px rgb(61, 67, 74);
+  padding: 50px;
+  border-radius: 45px;
+  visibility: hidden;
+  backdrop-filter: blur(5px);
+}
+
+#weatherContainer h1 {
+  /* margin: 5px 0 20px; */
+  font-size: 40px;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+#searchContainer {
+  display: flex;
+  height: 80px;
+  gap: 10px;
+  padding: 15px;
+  margin-bottom: 40px;
+}
+
+#searchContainer input {
+  width: 250px;
+  outline: none;
+  padding-left: 25px;
+  border-radius: 20px;
+}
+
+#searchContainer button {
+  background-color: rgb(78, 205, 196);
+  width: 75px;
+  color: rgb(85, 98, 112);
+  border-radius: 15px;
+}
+
+#searchContainer button:hover {
+  background-color: rgb(85, 98, 112);
+  cursor: pointer;
+  color: antiquewhite;
+}
+.searchControl {
+  box-shadow: 2px 2px 5px gray;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+}
+#weatherMain {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+#weatherMain div {
+  display: inline-block;
+}
+#iconAndName {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+#weatherDescriptionHeader {
+  font-size: 28px;
+  vertical-align: 50%;
+}
+#temperature {
+  font-size: 38px;
+  vertical-align: 25%;
+}
+.bottom-details {
+  display: block;
+  font-size: 24px;
+  text-align: right;
+}
+hr {
+  margin-bottom: 20px;
+}
+
+#documentIconImg {
+  width: 80px;
+}
