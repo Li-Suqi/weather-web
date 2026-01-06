@@ -39,24 +39,64 @@ const setCurrentTime = function (timeZone) {
   timeElement.innerHTML = `${weekDay}, ${month} ${day}, ${hours}:${minutes}`;
 };
 
-const init = function (resultFromServer) {
+const getForecastWeather = function (searchTerm) {
+  fetch(
+    `http://api.openweathermap.org/data/2.5/forecast?${searchMethod}=${searchTerm}&appid=${appId}&units=${units}`
+  )
+    .then((response) => {
+      return response.json(); // get a response from request, and parse it to .json
+    })
+    .then((result) => {
+      setForecastWeather(result);
+    });
+};
+
+const setForecastWeather = function (data) {
+  const forecastContainer = document.getElementById("forecastContainer");
+  forecastContainer.innerHTML = ""; // empty this container
+
+  const dailyData = data.list.filter((item) =>
+    item.dt_txt.includes("12:00:00")
+  );
+
+  dailyData.forEach((item) => {
+    // transfer to weekday
+    const date = new Date(item.dt * 1000);
+    const dayName = date.toLocaleDateString("en-US", { weekday: "short" });
+
+    // create entries
+    const forecastItem = document.createElement("div");
+    forecastItem.className = "forecastItem";
+
+    forecastItem.innerHTML = `
+        <div class="forecastDate">${dayName}</div>
+        <img class="forecast-img" src="https://openweathermap.org/img/wn/${
+          item.weather[0].icon
+        }.png" alt="">
+        <div class="forecastTemp">${Math.round(item.main.temp)}&#176C</div>
+    `;
+    forecastContainer.appendChild(forecastItem);
+  });
+};
+
+const setCurrentWeather = function (resultFromServer) {
   switch (resultFromServer.weather[0].main) {
     case "Clear":
-      document.body.style.backgroundImage = 'url("clear.jpg")';
+      document.body.style.backgroundImage = 'url("images/clear.jpg")';
       break;
     case "Clouds":
-      document.body.style.backgroundImage = 'url("cloudy.jpg")';
+      document.body.style.backgroundImage = 'url("images/cloudy.jpg")';
       break;
-    case "Rain":
-    case "Drizzle":
     case "Mist":
-      document.body.style.backgroundImage = 'url("rain.jpg")';
+      document.body.style.backgroundImage = 'url("images/mist.jpg")';
       break;
+    case "Drizzle":
+    case "Rain":
     case "Thunderstorm":
-      document.body.style.backgroundImage = 'url("storm.jpg")';
+      document.body.style.backgroundImage = 'url("images/rain.jpg")';
       break;
     case "Snow":
-      document.body.style.backgroundImage = 'url("snow.jpg")';
+      document.body.style.backgroundImage = 'url("images/snow.jpg")';
       break;
     default:
       break;
@@ -70,10 +110,12 @@ const init = function (resultFromServer) {
   const windSpeedElement = document.getElementById("windSpeed");
   const cityHeader = document.getElementById("cityHeader");
   const weatherIcon = document.getElementById("documentIconImg");
-  const weatherContainer = document.getElementById("weatherContainer");
 
-  weatherIcon.src = `https://openweathermap.org/img/wn/${resultFromServer.weather[0].icon}@2x.png`;
-  weatherContainer.style.visibility = "visible";
+  document.querySelectorAll(".glass-panel").forEach((panel) => {
+    panel.style.visibility = "visible";
+  });
+
+  weatherIcon.src = `https://openweathermap.org/img/wn/${resultFromServer.weather[0].icon}.png`;
 
   const timeZone = resultFromServer.timezone;
   setCurrentTime(timeZone);
@@ -82,11 +124,11 @@ const init = function (resultFromServer) {
   weatherDescriptionHeader.innerText =
     resultDescript.charAt(0).toUpperCase() + resultDescript.slice(1);
   temperaterElement.innerHTML =
-    Math.floor(resultFromServer.main.temp) + "&#176" + "C"; // &#176 is the degree sign
+    Math.round(resultFromServer.main.temp) + "&#176" + "C"; // &#176 is the degree sign
   windSpeedElement.innerHTML =
-    "Winds at: " + Math.floor(resultFromServer.wind.speed) + "m/s";
+    "Wind: " + Math.floor(resultFromServer.wind.speed) + "m/s";
   humidityElement.innerHTML =
-    "Humidity at: " + Math.floor(resultFromServer.main.humidity);
+    "Humidity: " + Math.floor(resultFromServer.main.humidity) + "%";
   cityHeader.innerHTML = resultFromServer.name;
 };
 
@@ -99,7 +141,7 @@ const searchWeather = function (searchTerm) {
       return response.json(); // get a response from request, and parse it to .json
     })
     .then((result) => {
-      init(result); // get the real data
+      setCurrentWeather(result); // get the real data and call this method to show current weather info
     });
 };
 
@@ -108,6 +150,9 @@ document
   .addEventListener("submit", (event) => {
     // prevent default refresh
     event.preventDefault();
-    const searchTerm = document.getElementById("searchInput").value;
-    if (searchTerm) searchWeather(searchTerm);
+    const searchTerm = document.getElementById("searchInput").value.trim();
+    if (searchTerm) {
+      searchWeather(searchTerm);
+      getForecastWeather(searchTerm);
+    }
   });

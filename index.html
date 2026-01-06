@@ -13,22 +13,26 @@
       />
       <button class="searchControl" id="searchBtn" type="submit">Search</button>
     </form>
-    <div id="weatherContainer">
-      <div id="currentTime">2015.1.6</div>
-      <div id="weatherDescription">
-        <div id="iconAndName">
-          <h1 id="cityHeader"></h1>
-          <div><img id="documentIconImg" alt="" /></div>
+    <div class="main-content">
+      <div id="weatherContainer" class="glass-panel">
+        <div id="currentTime">2015.1.6</div>
+        <div id="weatherDescription">
+          <div id="iconAndName">
+            <h1 id="cityHeader"></h1>
+            <div><img id="documentIconImg" alt="" /></div>
+          </div>
+          <div id="weatherMain">
+            <div id="temperature"></div>
+            <div id="weatherDescriptionHeader"></div>
+          </div>
+          <hr />
+          <div id="windSpeed" class="button-details"></div>
+          <div id="humidity" class="button-details"></div>
         </div>
-        <div id="weatherMain">
-          <div id="temperature"></div>
-          <div id="weatherDescriptionHeader"></div>
-        </div>
-        <hr />
-        <div id="windSpeed" class="button-details"></div>
-        <div id="humidity" class="button-details"></div>
       </div>
+      <div id="forecastContainer" class="glass-panel"></div>
     </div>
+
     <script src="script.js"></script>
   </body>
 </html>
